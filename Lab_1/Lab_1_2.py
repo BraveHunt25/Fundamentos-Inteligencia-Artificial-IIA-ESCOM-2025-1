@@ -12,6 +12,85 @@ MAPA_MOVIMIENTO = None
 
 
 class InterfazMapa:
+    def inicializar_terreno(self, direcion_terreno: str = None) -> NDArray[np.int_]:
+        self.ruta_absoluta_mapa = os.path.join(os.path.dirname(os.path.abspath(__file__)), direcion_terreno)
+        print(f"Intentando cargar el mapa desde: {self.ruta_absoluta_mapa}")
+        if os.path.exists(self.ruta_absoluta_mapa):
+            print("Se encontró el archivo\n")
+            try:
+                terreno = np.genfromtxt(self.ruta_absoluta_mapa, delimiter=',', dtype=int)
+                return terreno
+            except ValueError as e:
+                raise ValueError(f"Error al leer el archivo de mapa: {e}")
+        else:
+            raise FileNotFoundError("No se ha encontrado el archivo de mapa. Asegúrate de colocarlo en la misma carpeta que este programa")
+    
+    def inicializar_decisiones(self, direcion_terreno: str = None, mapa_terreno: NDArray[np.int_] = None) -> NDArray[np.int_]:
+        if mapa_terreno is None:
+            raise ValueError("No se ha indicado el mapa del terreno")
+        if direcion_terreno is None:
+            print("No se ha indicado un mapa de decisiones, generando uno en blanco...\n")
+            mapa = np.zeros_like(mapa_terreno)
+        else:
+            self.ruta_absoluta_mapa_decisiones = os.path.join(os.path.dirname(os.path.abspath(__file__)), direcion_terreno)
+            print(f"Intentando cargar el mapa de decisiones desde: {self.ruta_absoluta_mapa_decisiones}")
+            if os.path.exists(self.ruta_absoluta_mapa_decisiones):
+                try:
+                    mapa = np.genfromtxt(self.ruta_absoluta_mapa_decisiones, delimiter=',', dtype=int)
+                    if mapa_terreno.shape != mapa.shape:
+                        raise ValueError("Las dimensiones del mapa de decisiones no corresponden al del mapa cargado")
+                except ValueError as e:
+                    raise ValueError(f"Error al leer el archivo de decisiones: {e}")
+            else:
+                raise FileNotFoundError("No se ha encontrado el archivo de decisiones")
+        return mapa
+    
+    def inicializar_mascara(self, direccion_mascara: str = None, x_inicio: int = None, y_inicio: int = None, mapa_terreno: NDArray[np.int_] = None) -> NDArray[np.int_]:
+        if mapa_terreno is None:
+            raise ValueError("No se ha indicado el mapa del terreno")
+        if direccion_mascara is None:
+            print("No se ha indicado una máscara para el mapa, generando uno en blanco...\n")
+
+            x_inicio = np.random.randint(0, mapa_terreno.shape[0]) if x_inicio is None else np.clip(x_inicio, 0, mapa_terreno.shape[0] - 1)
+            y_inicio = np.random.randint(0, mapa_terreno.shape[1]) if y_inicio is None else np.clip(y_inicio, 0, mapa_terreno.shape[1] - 1)
+            
+            mapa_mascara = enmascarar_mapa(self.mapa, self.mapa_decisiones, x_inicio, y_inicio)
+        else:
+            self.ruta_absoluta_mapa_mascara = os.path.join(os.path.dirname(os.path.abspath(__file__)), direccion_mascara)
+            print(f"Intentando cargar el mapa de máscara desde: {self.ruta_absoluta_mapa_mascara}")
+            if os.path.exists(self.ruta_absoluta_mapa_mascara):
+                mapa_mascara = np.genfromtxt(self.ruta_absoluta_mapa_mascara, delimiter=',', dtype=int)
+                if self.mapa.shape != mapa_mascara.shape:
+                    raise ValueError("Las dimensiones del mapa 'máscara' no corresponden al del mapa cargado")
+            else:
+                raise FileNotFoundError("No se ha encontrado el archivo de máscara")
+        return mapa_mascara
+    
+    def inicializar_movimiento(self, direccion_movimiento: str = None, mapa_decisiones: NDArray[np.int_] = None, mapa_terreno: NDArray[np.int_] = None) -> NDArray[np.int_]:
+        if mapa_terreno is None:
+            raise ValueError("No se ha indicado el mapa del terreno")
+        if mapa_decisiones is None:
+            raise ValueError("No se ha indicado el mapa de decisiones")
+        if direccion_movimiento is None:
+            print("No se tiene registro de la posición del agente, generando uno en blanco...\n")
+            mapa_movimiento = np.zeros_like(mapa_terreno)
+            indices = np.where(mapa_decisiones == 1)
+            if indices[0].size > 0:
+                pos_agente_x, pos_agente_y = indices[0][0], indices[1][0]
+                print(f"Se encontró la posición inicial en las coordenadas ({pos_agente_x}, {pos_agente_y})")
+                mapa_movimiento[pos_agente_x, pos_agente_y] = 1
+            else:
+                print("No se encontró ningún '1' en el arreglo.")
+        else:
+            ruta_absoluta_mapa_movimiento = os.path.join(os.path.dirname(os.path.abspath(__file__)), direccion_movimiento)
+            if os.path.exists(ruta_absoluta_mapa_movimiento):
+                mapa_movimiento = np.genfromtxt(ruta_absoluta_mapa_movimiento, delimiter=',', dtype=int)
+                if mapa_terreno.shape != mapa_movimiento.shape:
+                    raise ValueError("Las dimensiones del mapa de movimiento no corresponden al del mapa cargado")
+            else:
+                raise FileNotFoundError("No se ha encontrado el archivo de movimiento")
+        return mapa_movimiento
+
     def __init__(self, root, ruta_mapa:str = None, ruta_mapa_decisiones: str = None, ruta_mapa_mascara: str = None, ruta_mapa_movimiento: str = None, x_inicio: int = None, y_inicio: int = None):
         self.root = root
         self.root.title("Interfaz de Mapas")
@@ -22,88 +101,16 @@ class InterfazMapa:
         
 # ----------- Generar y dibujar mapas iniciales ------------------------------------------
         # Inicializando mapa de terreno
-        self.mapa = None
-        self.ruta_absoluta_mapa = os.path.join(os.path.dirname(os.path.abspath(__file__)), ruta_mapa)
-
-        if os.path.exists(self.ruta_absoluta_mapa):
-            print("Se encontró el archivo\n")
-            # Conversión de archivo a arreglo numpy
-            self.mapa = np.genfromtxt(self.ruta_absoluta_mapa, delimiter=',', dtype=int)
-        else:
-            # print("No se ha encontrado el archivo de mapa. Asegúrate de colocarlo en la misma carpeta que este programa")
-            raise FileNotFoundError("No se ha encontrado el archivo de mapa. Asegúrate de colocarlo en la misma carpeta que este programa")
-
+        self.mapa = self.inicializar_terreno(ruta_mapa)
 
         # Inicializando mapa de decisiones
-        self.mapa_decisiones = None
-        # Búsqueda o creación de mapa de decisiones
-        if ruta_mapa_decisiones is None:
-            print("No se ha indicado un mapa de decisiones, generando uno en blanco...\n")
-            self.mapa_decisiones = np.zeros_like(self.mapa)
-            # print("El mapa de decisiones se llena con ceros\n")
-            # print(mapa_decisiones, "\n")
-        else:
-            self.ruta_absoluta_mapa_decisiones = os.path.join(os.path.dirname(os.path.abspath(__file__)), ruta_mapa_decisiones)
-            if os.path.exists(self.ruta_absoluta_mapa_decisiones):
-                # print("Se encontró el archivo\n")
-                self.mapa_decisiones = np.genfromtxt(self.ruta_absoluta_mapa_decisiones, delimiter=',', dtype=int)
-                if self.mapa.shape != self.mapa_decisiones.shape:
-                    # print("Las dimensiones del mapa de decisiones no corresponden al del mapa cargado\n")
-                    raise ValueError("Las dimensiones del mapa de decisiones no corresponden al del mapa cargado")
-            else:
-                # print("No se ha encontrado el archivo, asegúrate de colocarlo en la misma carpeta que este programa")
-                raise FileNotFoundError("No se ha encontrado el archivo de decisiones")
-
+        self.mapa_decisiones = self.inicializar_decisiones(ruta_mapa_decisiones, self.mapa)
 
         # Inicializando mapa máscara
-        self.mapa_mascara = None
-        # Búsqueda o creación de máscara
-        if ruta_mapa_mascara is None:
-            print("No se ha indicado una máscara para el mapa, generando uno en blanco...\n")
-            x_inicio = np.random.randint(0, self.mapa.shape[0]) if x_inicio is None else np.clip(x_inicio, 0, self.mapa_mascara.shape[0])
-            y_inicio = np.random.randint(0, self.mapa.shape[1]) if y_inicio is None else np.clip(y_inicio, 0, self.mapa_mascara.shape[1])
-            self.mapa_mascara = enmascarar_mapa(self.mapa, self.mapa_decisiones, x_inicio, y_inicio)
-            # print("La máscara para el mapa ha sido creado:\n")
-            # print(mapa_mascara, "\n")
-        else:
-            self.ruta_absoluta_mapa_mascara = os.path.join(os.path.dirname(os.path.abspath(__file__)), ruta_mapa_mascara)
-            if os.path.exists(self.ruta_absoluta_mapa_mascara):
-                # print("Se encontró el archivo\n")
-                self.mapa_mascara = np.genfromtxt(self.ruta_absoluta_mapa_mascara, delimiter=',', dtype=int)
-                if self.mapa.shape != self.mapa_mascara.shape:
-                    # print("Las dimensiones del mapa 'máscara' no corresponden al del mapa cargado\n")
-                    raise ValueError("Las dimensiones del mapa 'máscara' no corresponden al del mapa cargado")
-            else:
-                # print("No se ha encontrado el archivo, asegúrate de colocarlo en la misma carpeta que este programa")
-                raise FileNotFoundError("No se ha encontrado el archivo de máscara")
-        
+        self.mapa_mascara = self.inicializar_mascara(ruta_mapa_decisiones, x_inicio, y_inicio, self.mapa)
         
         # Iniciaizando mapa de movimiento
-        self.mapa_movimiento = None
-        # Búsqueda o inicialización de posicionamiento
-        if ruta_mapa_movimiento is None:
-            print("No se tiene registro de la posición del agente, generando uno en blanco...\n")
-            self.mapa_movimiento = np.zeros_like(self.mapa)
-            self.indices = np.where(self.mapa_decisiones == 1)
-            if self.indices[0].size > 0:
-            # Obtener la primera posición
-                self.pos_agente_x, self.pos_agente_y = self.indices[0][0], self.indices[1][0]
-                print(f"Se encontró la posición inicial en las coordenadas ({self.pos_agente_x}, {self.pos_agente_y})")
-                self.mapa_movimiento[self.pos_agente_x, self.pos_agente_y] = 1
-                # print("El mapa de decisiones de movilidad se ha iniciado\n")
-            else:
-                print("No se encontró ningún '1' en el arreglo.")
-        else:
-            self.ruta_absoluta_mapa_movimiento = os.path.join(os.path.dirname(os.path.abspath(__file__)), ruta_mapa_movimiento)
-            if os.path.exists(self.ruta_absoluta_mapa_movimiento):
-                # print("Se encontró el archivo\n")
-                self.mapa_movimiento = np.genfromtxt(self.ruta_absoluta_mapa_movimiento, delimiter=',', dtype=int)
-                if self.mapa.shape != self.mapa_movimiento.shape:
-                    # print("Las dimensiones del mapa de decisiones no corresponden al del mapa cargado\n")
-                    raise ValueError("Las dimensiones del mapa de movimiento no corresponden al del mapa cargado")
-            else:
-                # print("No se ha encontrado el archivo, asegúrate de colocarlo en la misma carpeta que este programa")
-                raise FileNotFoundError("No se ha encontrado el archivo de movimiento")
+        self.mapa_movimiento = self.inicializar_movimiento(ruta_mapa_movimiento, self.mapa_decisiones, self.mapa)
         
         # Crear el lienzo donde se dibujarán las cuadrículas
         self.canvas = Canvas(root, width=self.mapa.shape[0] * self.cell_size, height=self.mapa.shape[1] * self.cell_size)
