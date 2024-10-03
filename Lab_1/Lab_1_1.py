@@ -1,5 +1,7 @@
 # Hernández Jiménez Erick Yael
 # Laboratorio 1 de la materia Fundamentos de Inteligencia Artificial
+# Este archivo integra las funciones lógicas necesarias para su posterior impresión 
+# gráfica con Tkinter en el archivo `Lab_1-2.py`
 import os                           # Para acceder a las rutas y a los archivos
 import numpy as np                  # Para manipular arreglos multidimensionales
 from numpy.typing import NDArray    # Para reconocer las propiedades de los arreglos
@@ -203,98 +205,98 @@ def mover_agente(mapa: NDArray[np.int_], mapa_decisiones: NDArray[np.int_], mapa
 
 # Declaración inicial de los mapas
 contador_pasos: int = 0
-mapa_decisiones: NDArray[np.int_]
-mapa_mascara: NDArray[np.int_]
-mapa_movimiento: NDArray[np.int_]
-mapa: NDArray[np.int_]
-pos_agente_x: int
-pos_agente_y: int
+# mapa_decisiones: NDArray[np.int_]
+# mapa_mascara: NDArray[np.int_]
+# mapa_movimiento: NDArray[np.int_]
+# mapa: NDArray[np.int_]
+# pos_agente_x: int
+# pos_agente_y: int
 personaje: int
 
 # Búsqueda de archivo del mapa
-ruta_absoluta_mapa = os.path.join(os.path.dirname(os.path.abspath(__file__)), ruta_mapa)
-if os.path.exists(ruta_absoluta_mapa):
-    print("Se encontró el archivo\n")
-else:
-    print("No se ha encontrado el archivo, asegúrate de colocarlo en la misma carpeta que este programa\n")
-    
+# ruta_absoluta_mapa = os.path.join(os.path.dirname(os.path.abspath(__file__)), ruta_mapa)
+# if os.path.exists(ruta_absoluta_mapa):
+#     print("Se encontró el archivo\n")
+# else:
+#     print("No se ha encontrado el archivo, asegúrate de colocarlo en la misma carpeta que este programa\n")
+#     
 # Conversión de archivo a arreglo numpy
-mapa = np.genfromtxt(ruta_absoluta_mapa, delimiter=',', dtype=int)
+# mapa = np.genfromtxt(ruta_absoluta_mapa, delimiter=',', dtype=int)
 # Impresión de mapa
-print(mapa, "\n")
+# print(mapa, "\n")
 
 # Búsqueda o creación de mapa de decisiones
-if ruta_mapa_decisiones is None:
-    print("No se ha indicado un mapa de decisiones, generando uno en blanco...\n")
-    mapa_decisiones = np.zeros_like(mapa)
-    print("El mapa de decisiones se llena con ceros\n")
-    # print(mapa_decisiones, "\n")
-else:
-    ruta_absoluta_mapa_decisiones = os.path.join(os.path.dirname(os.path.abspath(__file__)), ruta_mapa_decisiones)
-    if os.path.exists(ruta_absoluta_mapa_decisiones):
-        print("Se encontró el archivo\n")
-        mapa_decisiones = np.genfromtxt(ruta_absoluta_mapa_decisiones, delimiter=',', dtype=int)
-        if mapa.shape == mapa_decisiones.shape:
-            print("Mapa cargado y válido\n")
-            # print(mapa_decisiones, "\n")
-        else:
-            print("Las dimensiones del mapa de decisiones no corresponden al del mapa cargado\n")
-    else:
-        print("No se ha encontrado el archivo, asegúrate de colocarlo en la misma carpeta que este programa")
-
+# if ruta_mapa_decisiones is None:
+#     print("No se ha indicado un mapa de decisiones, generando uno en blanco...\n")
+#     mapa_decisiones = np.zeros_like(mapa)
+#     print("El mapa de decisiones se llena con ceros\n")
+#     # print(mapa_decisiones, "\n")
+# else:
+#     ruta_absoluta_mapa_decisiones = os.path.join(os.path.dirname(os.path.abspath(__file__)), ruta_mapa_decisiones)
+#     if os.path.exists(ruta_absoluta_mapa_decisiones):
+#         print("Se encontró el archivo\n")
+#         mapa_decisiones = np.genfromtxt(ruta_absoluta_mapa_decisiones, delimiter=',', dtype=int)
+#         if mapa.shape == mapa_decisiones.shape:
+#             print("Mapa cargado y válido\n")
+#             # print(mapa_decisiones, "\n")
+#         else:
+#             print("Las dimensiones del mapa de decisiones no corresponden al del mapa cargado\n")
+#     else:
+#         print("No se ha encontrado el archivo, asegúrate de colocarlo en la misma carpeta que este programa")
+# 
 # Búsqueda o creación de máscara
-if ruta_mapa_mascara is None:
-    print("No se ha indicado una máscara para el mapa, generando uno en blanco...\n")
-    mapa_mascara = enmascarar_mapa(mapa, mapa_decisiones, int(input("Ingrese la fila en la que desea iniciar\n")), int(input("Ingrese la columna en la que desea iniciar\n")))
-    print("La máscara para el mapa ha sido creado:\n")
-    # print(mapa_mascara, "\n")
-else:
-    ruta_absoluta_mapa_mascara = os.path.join(os.path.dirname(os.path.abspath(__file__)), ruta_mapa_mascara)
-    if os.path.exists(ruta_absoluta_mapa_mascara):
-        print("Se encontró el archivo\n")
-        mapa_mascara = np.genfromtxt(ruta_absoluta_mapa_mascara, delimiter=',', dtype=int)
-        if mapa.shape == mapa_mascara.shape:
-            print("Mapa cargado y válido\n")
-            # print(mapa_mascara, "\n")
-        else:
-            print("Las dimensiones del mapa 'máscara' no corresponden al del mapa cargado\n")
-    else:
-        print("No se ha encontrado el archivo, asegúrate de colocarlo en la misma carpeta que este programa")
-
+# if ruta_mapa_mascara is None:
+#     print("No se ha indicado una máscara para el mapa, generando uno en blanco...\n")
+#     mapa_mascara = enmascarar_mapa(mapa, mapa_decisiones, int(input("Ingrese la fila en la que desea iniciar\n")), int(input("Ingrese la columna en la que desea iniciar\n")))
+#     print("La máscara para el mapa ha sido creado:\n")
+#     # print(mapa_mascara, "\n")
+# else:
+#     ruta_absoluta_mapa_mascara = os.path.join(os.path.dirname(os.path.abspath(__file__)), ruta_mapa_mascara)
+#     if os.path.exists(ruta_absoluta_mapa_mascara):
+#         print("Se encontró el archivo\n")
+#         mapa_mascara = np.genfromtxt(ruta_absoluta_mapa_mascara, delimiter=',', dtype=int)
+#         if mapa.shape == mapa_mascara.shape:
+#             print("Mapa cargado y válido\n")
+#             # print(mapa_mascara, "\n")
+#         else:
+#             print("Las dimensiones del mapa 'máscara' no corresponden al del mapa cargado\n")
+#     else:
+#         print("No se ha encontrado el archivo, asegúrate de colocarlo en la misma carpeta que este programa")
+# 
 # Búsqueda o inicialización de posicionamiento
-if ruta_mapa_movimiento is None:
-    print("No se tiene registro de la posición del agente, generando uno en blanco...\n")
-    mapa_movimiento = np.zeros_like(mapa)
-    indices = np.where(mapa_decisiones == 1)
-    if indices[0].size > 0:
-    # Obtener la primera posición
-        pos_agente_x = indices[0][0]
-        pos_agente_y = indices[1][0]
-        print(f"Se encontró la posición inicial en las coordenadas ({pos_agente_x}, {pos_agente_y})")
-        mapa_movimiento[pos_agente_x, pos_agente_y] = 1
-        print("El mapa de decisiones de movilidad se ha iniciado\n")
-    else:
-        print("No se encontró ningún '1' en el arreglo.")
-    print(mapa_movimiento, "\n")
-else:
-    ruta_absoluta_mapa_movimiento = os.path.join(os.path.dirname(os.path.abspath(__file__)), ruta_mapa_movimiento)
-    if os.path.exists(ruta_absoluta_mapa_movimiento):
-        print("Se encontró el archivo\n")
-        mapa_movimiento = np.genfromtxt(ruta_absoluta_mapa_movimiento, delimiter=',', dtype=int)
-        if mapa.shape == mapa_movimiento.shape:
-            print("Mapa cargado y válido\n")
-            # print(mapa_movimiento, "\n")
-        else:
-            print("Las dimensiones del mapa de decisiones no corresponden al del mapa cargado\n")
-    else:
-        print("No se ha encontrado el archivo, asegúrate de colocarlo en la misma carpeta que este programa")
-
-print("Imprimiendo los mapas\n", '*' * 20, "Mapa", '*' * 20, "\n", mapa)
-print('*' * 10, "Mapa decisiones", '*' * 10, "\n",  mapa_decisiones)
-print('*' * 10, "Mapa máscara", '*' * 10, "\n",  mapa_mascara)
-print('*' * 10, "Mapa de movimiento", '*' * 10, "\n",  mapa_movimiento)
-print("Generando un punto final aleatorio...\n")
-pos_final_x: int = np.random.randint(0, mapa_decisiones.shape[0])
-pos_final_y: int = np.random.randint(0, mapa_decisiones.shape[1])
-mapa_decisiones[pos_final_x, pos_final_y]
-desenmascarar_celda(mapa_mascara, pos_final_x, pos_final_y)
+# if ruta_mapa_movimiento is None:
+#     print("No se tiene registro de la posición del agente, generando uno en blanco...\n")
+#     mapa_movimiento = np.zeros_like(mapa)
+#     indices = np.where(mapa_decisiones == 1)
+#     if indices[0].size > 0:
+#     # Obtener la primera posición
+#         pos_agente_x = indices[0][0]
+#         pos_agente_y = indices[1][0]
+#         print(f"Se encontró la posición inicial en las coordenadas ({pos_agente_x}, {pos_agente_y})")
+#         mapa_movimiento[pos_agente_x, pos_agente_y] = 1
+#         print("El mapa de decisiones de movilidad se ha iniciado\n")
+#     else:
+#         print("No se encontró ningún '1' en el arreglo.")
+#     print(mapa_movimiento, "\n")
+# else:
+#     ruta_absoluta_mapa_movimiento = os.path.join(os.path.dirname(os.path.abspath(__file__)), ruta_mapa_movimiento)
+#     if os.path.exists(ruta_absoluta_mapa_movimiento):
+#         print("Se encontró el archivo\n")
+#         mapa_movimiento = np.genfromtxt(ruta_absoluta_mapa_movimiento, delimiter=',', dtype=int)
+#         if mapa.shape == mapa_movimiento.shape:
+#             print("Mapa cargado y válido\n")
+#             # print(mapa_movimiento, "\n")
+#         else:
+#             print("Las dimensiones del mapa de decisiones no corresponden al del mapa cargado\n")
+#     else:
+#         print("No se ha encontrado el archivo, asegúrate de colocarlo en la misma carpeta que este programa")
+# 
+# print("Imprimiendo los mapas\n", '*' * 20, "Mapa", '*' * 20, "\n", mapa)
+# print('*' * 10, "Mapa decisiones", '*' * 10, "\n",  mapa_decisiones)
+# print('*' * 10, "Mapa máscara", '*' * 10, "\n",  mapa_mascara)
+# print('*' * 10, "Mapa de movimiento", '*' * 10, "\n",  mapa_movimiento)
+# print("Generando un punto final aleatorio...\n")
+# pos_final_x: int = np.random.randint(0, mapa_decisiones.shape[0])
+# pos_final_y: int = np.random.randint(0, mapa_decisiones.shape[1])
+# mapa_decisiones[pos_final_x, pos_final_y]
+# desenmascarar_celda(mapa_mascara, pos_final_x, pos_final_y)
