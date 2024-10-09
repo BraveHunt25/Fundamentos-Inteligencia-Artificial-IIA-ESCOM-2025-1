@@ -17,8 +17,12 @@ mapa_actual = "terreno"
 
 # Inicializa el costo total
 costo_total = 0  # Variable global para acumular el costo total
+
 # Inicializando el contador de movimientos
 contador_movimientos = 0  # Variable global para contar los movimientos
+
+# Mensaje de llegada final
+mensaje_final = " " # Variable global para mostrar el mensaje de llegada al punto final
 
 # Mapas
 mapa_terreno = None
@@ -110,6 +114,10 @@ def desenmascarar_celda(mapa_mascara, x, y):
 def mover_personaje(direccion):
     global pos_agente_x, pos_agente_y, costo_total, contador_movimientos
 
+    # Verifica si el agente ya está en la posición final
+    if pos_agente_x == pos_final_x and pos_agente_y == pos_final_y:
+        return  # No hacer nada si el agente ya está en el punto final
+
     # Guarda la posición anterior del agente
     anterior_x, anterior_y = pos_agente_x, pos_agente_y
     
@@ -125,7 +133,7 @@ def mover_personaje(direccion):
         costo_movimiento = costos_movimiento[personaje_seleccionado].get(terreno_actual, 0)
         if costo_movimiento is not None:
             costo_total += costo_movimiento
-        
+
         # Incrementar el contador de movimientos
         contador_movimientos += 1
 
@@ -136,6 +144,7 @@ def mover_personaje(direccion):
     if mapa_decisiones[anterior_x, anterior_y] != 1 and mapa_decisiones[anterior_x, anterior_y] != 4:
         mapa_movimiento[anterior_x, anterior_y] = 0
     mapa_movimiento[pos_agente_x, pos_agente_y] = 1
+
 
 # Función para dibujar el mapa
 def dibujar_mapa():
@@ -161,11 +170,18 @@ def dibujar_mapa():
 
     # Mostrar el costo total
     costo_texto = pygame.font.Font(None, 24).render(f"Costo Total: {costo_total}", True, (255, 255, 255))
-    ventana.blit(costo_texto, (ventana.get_width() * 0.70, ventana.get_height() * 0.70))  # Ajusta la posición según sea necesario
+    ventana.blit(costo_texto, (ventana.get_width() * 0.70, ventana.get_height() * 0.70))  
 
     # Mostrar el número de movimientos
     movimientos_texto = pygame.font.Font(None, 24).render(f"Movimientos: {contador_movimientos}", True, (255, 255, 255))
-    ventana.blit(movimientos_texto, (ventana.get_width() * 0.70, ventana.get_height() * 0.80))  # Ajusta la posición según sea necesario
+    ventana.blit(movimientos_texto, (ventana.get_width() * 0.70, ventana.get_height() * 0.80))
+
+    # Mostrar el mensaje de llegada al punto final
+    global mensaje_final
+    if pos_agente_x == pos_final_x and pos_agente_y == pos_final_y:
+        mensaje_final = "¡Has llegado al punto final!"
+    etiqueta_mensaje_final = pygame.font.Font(None, 18).render(f"{mensaje_final}", True, (255,128,0))
+    ventana.blit(etiqueta_mensaje_final, (ventana.get_width() * 0.65, ventana.get_height() * 0.90))
 
 def obtener_color_decisiones(valor_decisiones, visible):
     colores_decisiones = {
