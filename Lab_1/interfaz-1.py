@@ -15,11 +15,24 @@ pos_agente_x, pos_agente_y = 0, 0  # Posición inicial
 pos_final_x, pos_final_y = 0, 0    # Posición final
 mapa_actual = "terreno"
 
+# Inicializa el costo total
+costo_total = 0  # Variable global para acumular el costo total
+# Inicializando el contador de movimientos
+contador_movimientos = 0  # Variable global para contar los movimientos
+
 # Mapas
 mapa_terreno = None
 mapa_decisiones = None
 mapa_mascara = None
 mapa_movimiento = None
+
+# Tabla de costos de movimiento
+costos_movimiento = {
+    "humano": {0: None, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 5},
+    "mono":   {0: None, 1: 2, 2: 4, 3: 3, 4: 1, 5: 5, 6: None},
+    "pulpo":  {0: None, 1: 2, 2: 1, 3: None, 4: 3, 5: 2, 6: None},
+    "pie-grande": {0: 15, 1: 4, 2: None, 3: None, 4: 4, 5: 5, 6: 3},
+}
 
 def dibujar_botones():
     # Dimensiones de los botones
@@ -95,18 +108,34 @@ def desenmascarar_celda(mapa_mascara, x, y):
 
 # Función para mover el agente
 def mover_personaje(direccion):
-    global pos_agente_x, pos_agente_y
+    global pos_agente_x, pos_agente_y, costo_total, contador_movimientos
 
     # Guarda la posición anterior del agente
     anterior_x, anterior_y = pos_agente_x, pos_agente_y
     
+    # Obtiene el terreno actual al que se mueve
+    terreno_actual = mapa_terreno[pos_agente_x, pos_agente_y]
+
     # Actualiza la posición del agente
-    pos_agente_x, pos_agente_y = mover_agente(mapa_terreno, mapa_decisiones, mapa_mascara, mapa_movimiento, pos_agente_x, pos_agente_y, direccion, personaje_seleccionado)
+    nueva_pos_x, nueva_pos_y = mover_agente(mapa_terreno, mapa_decisiones, mapa_mascara, mapa_movimiento, pos_agente_x, pos_agente_y, direccion, personaje_seleccionado)
+
+    # Verifica si el movimiento fue exitoso
+    if (nueva_pos_x, nueva_pos_y) != (pos_agente_x, pos_agente_y):
+        # Calcular el costo de movimiento
+        costo_movimiento = costos_movimiento[personaje_seleccionado].get(terreno_actual, 0)
+        if costo_movimiento is not None:
+            costo_total += costo_movimiento
+        
+        # Incrementar el contador de movimientos
+        contador_movimientos += 1
+
+        # Actualiza las posiciones
+        pos_agente_x, pos_agente_y = nueva_pos_x, nueva_pos_y
 
     # Asegúrate de que los puntos en el mapa de decisiones no cambien
-    if mapa_decisiones[anterior_x, anterior_y] != 1 and mapa_decisiones[anterior_x, anterior_y] != 4:  # Si la celda anterior no era el punto inicial
-        mapa_movimiento[anterior_x, anterior_y] = 0  # Restablece el movimiento en la celda anterior
-    mapa_movimiento[pos_agente_x, pos_agente_y] = 1  # Marca la nueva posición del agente
+    if mapa_decisiones[anterior_x, anterior_y] != 1 and mapa_decisiones[anterior_x, anterior_y] != 4:
+        mapa_movimiento[anterior_x, anterior_y] = 0
+    mapa_movimiento[pos_agente_x, pos_agente_y] = 1
 
 # Función para dibujar el mapa
 def dibujar_mapa():
@@ -129,6 +158,14 @@ def dibujar_mapa():
 
     # Dibujar los botones para cambiar de mapa
     dibujar_botones()
+
+    # Mostrar el costo total
+    costo_texto = pygame.font.Font(None, 24).render(f"Costo Total: {costo_total}", True, (255, 255, 255))
+    ventana.blit(costo_texto, (ventana.get_width() * 0.70, ventana.get_height() * 0.70))  # Ajusta la posición según sea necesario
+
+    # Mostrar el número de movimientos
+    movimientos_texto = pygame.font.Font(None, 24).render(f"Movimientos: {contador_movimientos}", True, (255, 255, 255))
+    ventana.blit(movimientos_texto, (ventana.get_width() * 0.70, ventana.get_height() * 0.80))  # Ajusta la posición según sea necesario
 
 def obtener_color_decisiones(valor_decisiones, visible):
     colores_decisiones = {
