@@ -1,9 +1,15 @@
 import pygame
 import os
 import numpy as np
-from Lab_1_1 import mover_agente, personajes, terrenos, desplazamientos
+from Lab_1_1 import mover_agente
 
 pygame.init()
+
+# Nombre de los archivos del mapa
+nombre_archivo_mapa = "laberinto_1_humano.txt" # "mapa_1.txt"
+nombre_archivo_mascara = None # "mapa_mascara.txt"
+nombre_archivo_decisiones = None # "mapa_decisiones.txt"
+nombre_archivo_movimiento = None # "mapa_movimiento.txt"
 
 # Tamaño de las celdas del mapa
 cell_size = 20
@@ -84,9 +90,42 @@ def inicializar_terreno(ruta_mapa):
 # Funciones para inicializar las capas (decisiones, máscara, movimiento)
 def inicializar_capas():
     global mapa_decisiones, mapa_mascara, mapa_movimiento
-    mapa_decisiones = np.zeros_like(mapa_terreno)
-    mapa_mascara = np.zeros_like(mapa_terreno)
-    mapa_movimiento = np.zeros_like(mapa_terreno)
+
+    # Intentar cargar la capa de decisiones
+    if nombre_archivo_decisiones is not None:
+        try:
+            ruta_decisiones = os.path.join(os.path.dirname(os.path.abspath(__file__)), nombre_archivo_decisiones)
+            mapa_decisiones = np.genfromtxt(ruta_decisiones, delimiter=',', dtype=int)
+        except Exception as e:
+            print(f"Error al cargar el mapa de decisiones desde '{nombre_archivo_decisiones}': {e}")
+            mapa_decisiones = np.zeros_like(mapa_terreno)  # Generar nueva capa si falla
+
+    else:
+        mapa_decisiones = np.zeros_like(mapa_terreno)  # Generar nueva capa si no se proporciona un archivo
+
+    # Intentar cargar la capa de máscara
+    if nombre_archivo_mascara is not None:
+        try:
+            ruta_mascara = os.path.join(os.path.dirname(os.path.abspath(__file__)), nombre_archivo_mascara)
+            mapa_mascara = np.genfromtxt(ruta_mascara, delimiter=',', dtype=int)
+        except Exception as e:
+            print(f"Error al cargar el mapa de máscara desde '{nombre_archivo_mascara}': {e}")
+            mapa_mascara = np.zeros_like(mapa_terreno)  # Generar nueva capa si falla
+
+    else:
+        mapa_mascara = np.zeros_like(mapa_terreno)  # Generar nueva capa si no se proporciona un archivo
+
+    # Intentar cargar la capa de movimiento
+    if nombre_archivo_movimiento is not None:
+        try:
+            ruta_movimiento = os.path.join(os.path.dirname(os.path.abspath(__file__)), nombre_archivo_movimiento)
+            mapa_movimiento = np.genfromtxt(ruta_movimiento, delimiter=',', dtype=int)
+        except Exception as e:
+            print(f"Error al cargar el mapa de movimiento desde '{nombre_archivo_movimiento}': {e}")
+            mapa_movimiento = np.zeros_like(mapa_terreno)  # Generar nueva capa si falla
+
+    else:
+        mapa_movimiento = np.zeros_like(mapa_terreno)  # Generar nueva capa si no se proporciona un archivo
 
     # Colocar el personaje en la posición inicial
     mapa_movimiento[pos_agente_x, pos_agente_y] = 1
@@ -212,6 +251,7 @@ def obtener_color(valor_terreno, visible):
 
 # Función para seleccionar personaje
 def menu_personajes():
+    ventana.fill((135, 206, 235))
     global personaje_seleccionado, pos_agente_x, pos_agente_y, pos_final_x, pos_final_y
 
     # Opciones de personajes
@@ -278,9 +318,13 @@ def menu_personajes():
 
     return True
 
+# Exportar los mapas al terminar el juego
+def exportar_mapa(nombre_archivo, mapa):
+    np.savetxt(nombre_archivo, mapa, fmt='%d', delimiter=',')
+
 
 # Inicialización del terreno
-inicializar_terreno("mapa_1.txt")
+inicializar_terreno(nombre_archivo_mapa)
 
 # Configuración básica de la ventana de Pygame
 ancho = mapa_terreno.shape[0] * cell_size + 170
@@ -298,6 +342,11 @@ menu_visible = True
 while jugando:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            # Exportar mapas al cerrar el juego
+            exportar_mapa("mapa_terreno.txt", mapa_terreno)
+            exportar_mapa("mapa_decisiones.txt", mapa_decisiones)
+            exportar_mapa("mapa_mascara.txt", mapa_mascara)
+            exportar_mapa("mapa_movimiento.txt", mapa_movimiento)
             jugando = False
 
         # Teclas de dirección para mover al agente
