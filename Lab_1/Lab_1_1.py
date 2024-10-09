@@ -16,7 +16,7 @@ personajes = {
     'humano': 0,
     'mono': 1,
     'pulpo': 2,
-    'piegrande': 3
+    'pie-grande': 3
 }
 
 terrenos = {
@@ -156,15 +156,16 @@ def mover_agente(mapa: NDArray[np.int_], mapa_decisiones: NDArray[np.int_], mapa
         print("Movimiento no accesible.")
         return pos_x, pos_y  # Retorna a la posición original si no es accesible
     
+    tipos_terreno = ['montaña', 'tierra', 'agua', 'arena', 'bosque', 'pantano', 'nieve']
     # Obtiene el tipo de terreno en la nueva posición
     tipo_terreno = mapa[nueva_x, nueva_y]
     if tipo_terreno not in terrenos.values():
         print("Terreno inválido.")
         return pos_x, pos_y  # Retorna si el terreno no es válido
+    nombre_terreno = tipos_terreno[int(tipo_terreno)]
 
     # Verificar la movilidad del personaje en el terreno
-    movilidad_personaje = desplazamientos[terrenos[tipo_terreno]][personaje]
-    if movilidad_personaje is None:
+    if nombre_terreno not in desplazamientos or personaje not in desplazamientos[nombre_terreno]:
         print(f"El personaje '{personaje}' no puede moverse en el terreno '{list(terrenos.keys())[list(terrenos.values()).index(tipo_terreno)]}'.")
         return pos_x, pos_y
 
