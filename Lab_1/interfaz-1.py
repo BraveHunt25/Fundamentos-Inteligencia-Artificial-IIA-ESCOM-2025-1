@@ -70,12 +70,17 @@ def inicializar_capas():
     mapa_decisiones = np.zeros_like(mapa_terreno)
     mapa_mascara = np.zeros_like(mapa_terreno)
     mapa_movimiento = np.zeros_like(mapa_terreno)
-    
+
     # Colocar el personaje en la posición inicial
     mapa_movimiento[pos_agente_x, pos_agente_y] = 1
 
+    # Marcar los puntos inicial y final en el mapa de decisiones
+    mapa_decisiones[pos_agente_x, pos_agente_y] = 1  # Marcar el punto inicial
+    mapa_decisiones[pos_final_x, pos_final_y] = 4    # Marcar el punto final
+
     # Desenmascarar las celdas alrededor del personaje
     desenmascarar_celda(mapa_mascara, pos_agente_x, pos_agente_y)
+
 
 def desenmascarar_celda(mapa_mascara, x, y):
     # Desenmascarar la celda actual
@@ -91,7 +96,17 @@ def desenmascarar_celda(mapa_mascara, x, y):
 # Función para mover el agente
 def mover_personaje(direccion):
     global pos_agente_x, pos_agente_y
+
+    # Guarda la posición anterior del agente
+    anterior_x, anterior_y = pos_agente_x, pos_agente_y
+    
+    # Actualiza la posición del agente
     pos_agente_x, pos_agente_y = mover_agente(mapa_terreno, mapa_decisiones, mapa_mascara, mapa_movimiento, pos_agente_x, pos_agente_y, direccion, personaje_seleccionado)
+
+    # Asegúrate de que los puntos en el mapa de decisiones no cambien
+    if mapa_decisiones[anterior_x, anterior_y] != 1 and mapa_decisiones[anterior_x, anterior_y] != 4:  # Si la celda anterior no era el punto inicial
+        mapa_movimiento[anterior_x, anterior_y] = 0  # Restablece el movimiento en la celda anterior
+    mapa_movimiento[pos_agente_x, pos_agente_y] = 1  # Marca la nueva posición del agente
 
 # Función para dibujar el mapa
 def dibujar_mapa():
@@ -145,6 +160,7 @@ def obtener_color(valor_terreno, visible):
 # Función para seleccionar personaje (migrada de Tkinter a Pygame)
 def menu_personajes():
     global personaje_seleccionado, pos_agente_x, pos_agente_y, pos_final_x, pos_final_y
+
     # Opciones de personajes
     opciones = ["humano", "mono", "pulpo", "pie-grande"]
 
@@ -174,12 +190,36 @@ def menu_personajes():
         y_pos = espacio_vertical + i * (boton_alto + espacio_vertical)
         if x_pos < mouse[0] < x_pos + boton_ancho and y_pos < mouse[1] < y_pos + boton_alto and click[0]:
             personaje_seleccionado = personaje
+            
+            # Validar y asignar las coordenadas
+            # Función para validar entrada
+            def validar_entrada(input_str, max_val):
+                if input_str.strip() == '':
+                    return np.random.randint(0, max_val)  # Retorna un valor aleatorio si está vacío
+                try:
+                    value = int(input_str)
+                    # Ajusta al rango válido
+                    return np.clip(value, 0, max_val - 1)
+                except ValueError:
+                    return np.random.randint(0, max_val)  # Retorna un valor aleatorio si hay un error
 
-            # Puntos iniciales y finales opcionales (si no, generar aleatorios)
-            pos_agente_x = int(input("Ingrese la coordenada X inicial (o presione Enter para aleatorio): ") or np.random.randint(0, mapa_terreno.shape[0]))
-            pos_agente_y = int(input("Ingrese la coordenada Y inicial (o presione Enter para aleatorio): ") or np.random.randint(0, mapa_terreno.shape[1]))
-            pos_final_x = int(input("Ingrese la coordenada X final (o presione Enter para aleatorio): ") or np.random.randint(0, mapa_terreno.shape[0]))
-            pos_final_y = int(input("Ingrese la coordenada Y final (o presione Enter para aleatorio): ") or np.random.randint(0, mapa_terreno.shape[1]))
+            # Obtener dimensiones del mapa
+            max_x = mapa_terreno.shape[0]
+            max_y = mapa_terreno.shape[1]
+
+            input_x_inicial = input("Ingrese la coordenada X inicial (o presione Enter para aleatorio): ")
+            input_y_inicial = input("Ingrese la coordenada Y inicial (o presione Enter para aleatorio): ")
+            input_x_final = input("Ingrese la coordenada X final (o presione Enter para aleatorio): ")
+            input_y_final = input("Ingrese la coordenada Y final (o presione Enter para aleatorio): ")
+
+            # Validar entradas y asignar
+            pos_agente_x = validar_entrada(input_x_inicial, max_x)
+            pos_agente_y = validar_entrada(input_y_inicial, max_y)
+            pos_final_x = validar_entrada(input_x_final, max_x)
+            pos_final_y = validar_entrada(input_y_final, max_y)
+
+            # Inicializar capas aquí ahora que se tienen las posiciones
+            inicializar_capas()  # Mueve esto aquí para inicializar las capas con las nuevas posiciones
 
             return False  # Ocultar el menú después de seleccionar
 

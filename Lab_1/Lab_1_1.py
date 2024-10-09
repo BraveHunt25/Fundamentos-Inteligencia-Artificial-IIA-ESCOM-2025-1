@@ -152,7 +152,7 @@ def mover_agente(mapa: NDArray[np.int_], mapa_decisiones: NDArray[np.int_], mapa
         return pos_x, pos_y  # Retorna a la posición original si el movimiento es fuera de los límites
 
     # Comprueba si el movimiento es accesible
-    if mapa_decisiones[nueva_x, nueva_y] not in range(0, 3):  # Véase la representación del mapa de decisiones
+    if mapa_decisiones[nueva_x, nueva_y] not in range(0, 5):  # Véase la representación del mapa de decisiones
         print("Movimiento no accesible.")
         return pos_x, pos_y  # Retorna a la posición original si no es accesible
     
@@ -174,7 +174,7 @@ def mover_agente(mapa: NDArray[np.int_], mapa_decisiones: NDArray[np.int_], mapa
     mapa_movimiento[nueva_x, nueva_y] = 1  # Establecer la nueva posición
 
     # Actualiza el mapa de decisiones
-    if mapa_decisiones[nueva_x, nueva_y] != 1:
+    if mapa_decisiones[nueva_x, nueva_y] != 1 and mapa_decisiones[nueva_x, nueva_y] != 4:
         mapa_decisiones[nueva_x, nueva_y] = 2  # Marca como visitado
     
     # Desenmascara la nueva posición
