@@ -140,7 +140,7 @@ def mover_personaje(direccion):
         # Actualiza las posiciones
         pos_agente_x, pos_agente_y = nueva_pos_x, nueva_pos_y
 
-    # Asegúrate de que los puntos en el mapa de decisiones no cambien
+    # Asegura que los puntos en el mapa de decisiones no cambien
     if mapa_decisiones[anterior_x, anterior_y] != 1 and mapa_decisiones[anterior_x, anterior_y] != 4:
         mapa_movimiento[anterior_x, anterior_y] = 0
     mapa_movimiento[pos_agente_x, pos_agente_y] = 1
@@ -210,7 +210,7 @@ def obtener_color(valor_terreno, visible):
         return (0, 0, 0)  # No visible
     return colores_terrenos.get(valor_terreno, (0, 0, 0))
 
-# Función para seleccionar personaje (migrada de Tkinter a Pygame)
+# Función para seleccionar personaje
 def menu_personajes():
     global personaje_seleccionado, pos_agente_x, pos_agente_y, pos_final_x, pos_final_y
 
@@ -272,7 +272,7 @@ def menu_personajes():
             pos_final_y = validar_entrada(input_y_final, max_y)
 
             # Inicializar capas aquí ahora que se tienen las posiciones
-            inicializar_capas()  # Mueve esto aquí para inicializar las capas con las nuevas posiciones
+            inicializar_capas()
 
             return False  # Ocultar el menú después de seleccionar
 
