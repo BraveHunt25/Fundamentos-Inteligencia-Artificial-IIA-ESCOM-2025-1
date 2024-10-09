@@ -1,5 +1,6 @@
 # Hernández Jiménez Erick Yael
-# Laboratorio 1 de la materia Fundamentos de Inteligencia Artificial
+# Sanchez Flores María Fernanda
+# Laboratorio 1 de la materia Fundamentos de Inteligencia Artificial ESCOM IIA 2025-1
 # Este archivo integra las funciones lógicas necesarias para su posterior impresión 
 # gráfica con gamePy en el archivo `interfaz-1.py`
 import numpy as np                  # Para manipular arreglos multidimensionales

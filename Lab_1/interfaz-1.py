@@ -1,7 +1,13 @@
-import pygame
-import os
-import numpy as np
-from Lab_1_1 import mover_agente
+# Hernández Jiménez Erick Yael
+# Sanchez Flores María Fernanda
+# Laboratorio 1 de la materia Fundamentos de Inteligencia Artificial ESCOM IIA 2025-1
+# Este archivo integra las funciones lógicas necesarias para su posterior impresión 
+# gráfica con gamePy en el archivo `interfaz-1.py`
+
+import pygame                       # Para construir la interfaz gráfica
+import os                           # Para acceder al mapa
+import numpy as np                  # Para manipular los arreglos
+from Lab_1_1 import mover_agente    # Para las funciones lógicas del explorador de mapas proveniente del archivo homónimo con extensión ".py"
 
 pygame.init()
 
