@@ -8,6 +8,8 @@ import pygame                       # Para construir la interfaz gráfica
 import os                           # Para acceder al mapa
 import numpy as np                  # Para manipular los arreglos
 from Lab_1_1 import mover_agente    # Para las funciones lógicas del explorador de mapas proveniente del archivo homónimo con extensión ".py"
+from Nodo import Nodo
+from numpy.typing import NDArray 
 
 pygame.init()
 
@@ -142,7 +144,29 @@ def inicializar_capas():
 
     # Desenmascarar las celdas alrededor del personaje
     desenmascarar_celda(mapa_mascara, pos_agente_x, pos_agente_y)
+    print("Los posibles movimientos del agente son: ", movimientos_posibles(pos_agente_x, pos_agente_y, mapa_terreno, personaje_seleccionado))
 
+def movimientos_posibles(x_actual: int, y_actual: int, mapa_terreno: NDArray[np.int_], personaje: str) -> list[str]:
+    direcciones_posibles: set = set()
+    direcciones = {
+        'arriba': (-1, 0),
+        'abajo': (1, 0),
+        'izquierda': (0, -1),
+        'derecha': (0, 1)
+    }
+    for direccion, (dx, dy) in direcciones.items():
+        nuevo_x = x_actual + dx
+        nuevo_y = y_actual + dy
+
+        # Verifica si la posición adyacente está dentro de los límites del mapa
+        if 0 <= nuevo_x < mapa_terreno.shape[0] and 0 <= nuevo_y < mapa_terreno.shape[1]:
+            tipo_terreno_adjacente = mapa_terreno[nuevo_x, nuevo_y]
+            
+            # Verifica si el personaje puede moverse a este tipo de terreno
+            if tipo_terreno_adjacente in costos_movimiento[personaje] and costos_movimiento[personaje][tipo_terreno_adjacente] is not None:
+                direcciones_posibles.add(direccion)
+
+    return list(direcciones_posibles)
 
 def desenmascarar_celda(mapa_mascara, x, y):
     # Desenmascarar la celda actual
@@ -184,6 +208,10 @@ def mover_personaje(direccion):
 
         # Actualiza las posiciones
         pos_agente_x, pos_agente_y = nueva_pos_x, nueva_pos_y
+        
+        # Busca las posibles direcciones
+        print("Los posibles movimientos del agente son: ", movimientos_posibles(pos_agente_x, pos_agente_y, mapa_terreno, personaje_seleccionado))
+
 
     # Asegura que los puntos en el mapa de decisiones no cambien
     if mapa_decisiones[anterior_x, anterior_y] != 1 and mapa_decisiones[anterior_x, anterior_y] != 4:
