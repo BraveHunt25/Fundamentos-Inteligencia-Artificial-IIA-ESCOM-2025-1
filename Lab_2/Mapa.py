@@ -28,9 +28,11 @@ class Mapa():
             self._alto_y: int = alto_y
             self._contenido = np.random.randint(self._lim_inf, self._lim_sup, size=(self._ancho_x, self._alto_y))
     
+    # Regresa el valor de la celda en las coordenadas especificadas
     def valor(self, coordenada_x: int, coordenada_y: int) -> int:
         return self._contenido[coordenada_x, coordenada_y]
     
+    # Regresa un diccionario con las direcciones y coordenadas de los vecinos de la celda
     def vecindad(self, origen_x: int, origen_y: int) -> dict:
         if 0 <= origen_x < self._ancho_x and 0 <= origen_y < self._alto_y:
             vecinos: dict = {}
@@ -45,6 +47,8 @@ class Mapa():
                 nueva_y: int = origen_y + dy
                 if 0 <= nueva_x < self._ancho_x and 0 <= nueva_y < self._alto_y:
                     vecinos[direccion] = (nueva_x, nueva_y)
+        else:
+            print("Posición no válida")
 
 class Terreno(Mapa):
     def __init__(self, ancho_x: int = 1, alto_y: int = 1, lim_inf: int = 0, lim_sup: int = 6, ruta_archivo: str = None):
@@ -96,12 +100,14 @@ class Terreno(Mapa):
             6: 'nieve'
         }
 
+    # Regresa el tipo de terreno que es en la posición dada
     def terreno(self, pos_x: int = 0, pos_y: int = 0) -> str:
         if 0 <= pos_x < self._ancho_x and 0 <= pos_y < self._alto_y:
             return self._terrenos.get(self._contenido[pos_x, pos_y])
         else:
             return None
         
+    # Indica si el personaje se puede posicionar en la celda
     def se_puede_posicionar(self, pos_x: int, pos_y: int, personaje: str = "humano") -> bool:
         if 0 <= pos_x < self._ancho_x and 0 <= pos_y < self._alto_y:
             if self._contenido[pos_x, pos_y] not in self._terrenos[self._contenido[pos_x, pos_y]] or personaje not in self._costos_movimientos[self._contenido[pos_x, pos_y]]:
@@ -109,7 +115,7 @@ class Terreno(Mapa):
             else:
                 return True
             
-class Decisiones(Mapa):
+class Decisiones(Terreno):
     '''
     0 = Lugares que no ha visitado
     1 = Punto inicial
@@ -117,8 +123,10 @@ class Decisiones(Mapa):
     3 = Lugares donde se hizo una decisión
     4 = Punto final
     '''
-    def __init__(self, ancho_x: int = 1, alto_y: int = 1, lim_inf: int = 0, lim_sup: int = 4, ruta_archivo: str = None, pos_ini_x: int = None, pos_ini_y: int = None, pos_fin_x: int = None, pos_fin_y: int = None):
+    def __init__(self, ancho_x = 1, alto_y = 1, lim_inf = 0, lim_sup = 6, ruta_archivo = None):
         super().__init__(ancho_x, alto_y, lim_inf, lim_sup, ruta_archivo)
+
+        '''
         if ruta_archivo is None:
             self._contenido = np.zeros_like(dtype=int, shape=(ancho_x, alto_y))
             if pos_ini_x is None: pos_ini_x = np.random.randint(0, self._contenido.shape[0])
@@ -127,19 +135,28 @@ class Decisiones(Mapa):
             if pos_fin_y is None: pos_fin_y = np.random.randint(0, self._contenido.shape[1])
             self._contenido[pos_ini_x, pos_ini_y] = 1
             self._contenido[pos_fin_x, pos_fin_y] = 4
+        '''
 
-    def vecindad(self, origen_x: int, origen_y: int, personaje: str = "humano") -> dict:
+class Mascara(Mapa):
+    '''
+    0 = No visible
+    1 = Visible
+    '''
+    def __init__(self, ancho_x = 1, alto_y = 1, lim_inf = 0, lim_sup = 1, ruta_archivo = None, pos_ini_x: int = None, pos_ini_y: int = None):
+        super().__init__(ancho_x, alto_y, lim_inf, lim_sup, ruta_archivo)
+        if ruta_archivo is None:
+            self._contenido = np.zeros_like(dtype=int, shape=(ancho_x, alto_y))
+            self._contenido[pos_ini_x, pos_ini_y] = 1
+            for dx, dy in self.vecindad(pos_ini_x, pos_ini_y):
+                self._contenido[pos_ini_x + dx, pos_ini_y + dy] = 1
+
+    def mostrar(self, origen_x: int, origen_y: int):
         if 0 <= origen_x < self._ancho_x and 0 <= origen_y < self._alto_y:
-            vecinos: dict = {}
-            desplazamientos: dict = {
-                'arriba': (-1, 0),
-                'abajo': (1, 0),
-                'izquierda': (0, -1),
-                'derecha': (0, 1)
-            }
-            for direccion, (dx, dy) in desplazamientos.items():
+            self._contenido[origen_x, origen_y] = 1
+            for dx, dy in self.vecindad(origen_x, origen_y):
                 nueva_x: int = origen_x + dx
                 nueva_y: int = origen_y + dy
-                if 0 <= nueva_x < self._ancho_x and 0 <= nueva_y < self._alto_y:
-                    vecinos[direccion] = (nueva_x, nueva_y)
-    
+                if 0 <= nueva_x < self._contenido.shape[0] and 0 <= nueva_y < self._contenido.shape[1]:
+                    self._contenido[origen_x + dx, origen_y + dy] = 1
+        else:
+            print("Posición no válida")
