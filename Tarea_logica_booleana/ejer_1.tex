@@ -1,0 +1,73 @@
+% TEX root = ./main.tex
+\section{Escribe las tablas de verdad para las operaciones not, and, or, or exclusivo, implicación y doble implicación}
+\subsection{NOT}
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        a & $\overline{a}$\\
+        \hline
+        0 & 1 \\
+        \hline
+        1 & 0 \\
+        \hline
+    \end{tabular}
+    \caption{Tabla de verdad: NOT}\label{table:not}
+\end{table}
+
+\subsection{AND}
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        a & b & a$\wedge$b\\
+        \hline
+        0 & 0 & 0 \\
+        \hline
+        0 & 1 & 0 \\
+        \hline
+        1 & 0 & 0 \\
+        \hline
+        1 & 1 & 1 \\
+        \hline
+    \end{tabular}
+    \caption{Tabla de verdad: AND}\label{table:and}
+\end{table}
+
+\subsection{OR}
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        a & b & a$\vee$b\\
+        \hline
+        0 & 0 & 0 \\
+        \hline
+        0 & 1 & 1 \\
+        \hline
+        1 & 0 & 1 \\
+        \hline
+        1 & 1 & 1 \\
+        \hline
+    \end{tabular}
+    \caption{Tabla de verdad: OR}\label{table:or}
+\end{table}
+
+\subsection{XOR}
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        a & b & a$\oplus$b\\
+        \hline
+        0 & 0 & 0 \\
+        \hline
+        0 & 1 & 1 \\
+        \hline
+        1 & 0 & 1 \\
+        \hline
+        1 & 1 & 0 \\
+        \hline
+    \end{tabular}
+    \caption{Tabla de verdad: XOR}\label{table:xor}
+\end{table}

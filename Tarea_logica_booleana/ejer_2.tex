@@ -1,0 +1,119 @@
+% !TeX root = main.tex
+\section{Escribe las tablas de verdad de las siguientes expresiones:}
+\subsection{$(a\vee b)\wedge c$}
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        a & b & c & $a\vee b$ & $(a\vee b)\wedge c$ \\
+        \hline
+        0 & 0 & 0 & 0 & 0 \\
+        \hline
+        0 & 0 & 1 & 0 & 0 \\
+        \hline
+        0 & 1 & 0 & 1 & 0 \\
+        \hline
+        0 & 1 & 1 & 1 & 1 \\
+        \hline
+        1 & 0 & 0 & 1 & 0 \\
+        \hline
+        1 & 0 & 1 & 1 & 1 \\
+        \hline
+        1 & 1 & 0 & 1 & 0 \\
+        \hline
+        1 & 1 & 1 & 1 & 1 \\
+        \hline
+    \end{tabular}
+    \caption{Tabla de verdad: Ejercicio 2 - 1}\label{table:2-1}
+\end{table}
+\subsection{$a \vee (b\wedge c)$}
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        a & b & c & $b\wedge c$ & $a \vee (b\wedge c)$ \\
+        \hline
+        0 & 0 & 0 & 0 & 0 \\
+        \hline
+        0 & 0 & 1 & 0 & 0 \\
+        \hline
+        0 & 1 & 0 & 0 & 0 \\
+        \hline
+        0 & 1 & 1 & 1 & 1 \\
+        \hline
+        1 & 0 & 0 & 0 & 1 \\
+        \hline
+        1 & 0 & 1 & 0 & 1 \\
+        \hline
+        1 & 1 & 0 & 0 & 1 \\
+        \hline
+        1 & 1 & 1 & 1 & 1 \\
+        \hline
+    \end{tabular}
+    \caption{Tabla de verdad: Ejercicio 2 - 2}\label{table:2-2}
+\end{table}
+\newpage
+\subsection{$(a \wedge b) \vee c$}
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        a & b & c & $a \wedge b$ & $(a \wedge b) \vee c$ \\
+        \hline
+        0 & 0 & 0 & 0 & 0 \\
+        \hline
+        0 & 0 & 1 & 0 & 0 \\
+        \hline
+        0 & 1 & 0 & 0 & 0 \\
+        \hline
+        0 & 1 & 1 & 1 & 1 \\
+        \hline
+        1 & 0 & 0 & 0 & 1 \\
+        \hline
+        1 & 0 & 1 & 0 & 1 \\
+        \hline
+        1 & 1 & 0 & 0 & 1 \\
+        \hline
+        1 & 1 & 1 & 1 & 1 \\
+        \hline
+    \end{tabular}
+    \caption{Tabla de verdad: Ejercicio 2 - 3}\label{table:2-3}
+\end{table}
+
+\subsection{$\overline{a\vee b}$}
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        a & b & a $\vee$ b & \rule{0pt}{2.5ex}$\overline{a\vee b}$ \\
+        \hline
+        0 & 0 & 0 & 1\\
+        \hline
+        0 & 1 & 1 & 0\\
+        \hline
+        1 & 0 & 1 & 0\\
+        \hline
+        1 & 1 & 1 & 0\\
+        \hline
+    \end{tabular}
+    \caption{Tabla de verdad: Ejercicio 2 - 4}\label{table:2-4}
+\end{table}
+
+\subsection{$\overline{a}\wedge \overline{b}$}
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        a & b & \rule{0pt}{2.5ex}$\overline{a}$ & \rule{0pt}{2.5ex}$\overline{b}$ & $\overline{a}\wedge \overline{b}$\\
+        \hline
+        0 & 0 & 1 & 1 & 1\\
+        \hline
+        0 & 1 & 1 & 0 & 0\\
+        \hline
+        1 & 0 & 0 & 1 & 0\\
+        \hline
+        1 & 1 & 0 & 0 & 0\\
+        \hline
+    \end{tabular}
+    \caption{Tabla de verdad: Ejercicio 2 - 5}\label{table:2-5}
+\end{table}

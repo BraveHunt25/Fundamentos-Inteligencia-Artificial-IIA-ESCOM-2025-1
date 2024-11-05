@@ -1,0 +1,73 @@
+% !TeX root = main.tex
+\section{Usando solo el operador NAND $\overline{\wedge}$, construye las tablas de verdad del ejercicio 1}
+\subsection{Para NOT}
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        a & \rule{0pt}{2.5ex}$a \overline{\wedge} a$ \\
+        \hline
+        0 & 1 \\
+        \hline
+        1 & 0 \\
+        \hline
+    \end{tabular}
+    \caption{Tabla de verdad con NAND:NOT}\label{table:NAND-NOT}
+\end{table}
+\newpage
+\subsection{Para OR}
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        a & b & \rule{0pt}{2.5ex}$a \overline{\wedge} a$ & $b \overline{\wedge} b$ & $(a \overline{\wedge} a) \overline{\wedge} (b \overline{\wedge} b)$ \\
+        \hline
+        0 & 0 & 1 & 1 & 0 \\
+        \hline
+        0 & 1 & 1 & 0 & 1 \\
+        \hline
+        1 & 0 & 0 & 1 & 1 \\
+        \hline
+        1 & 1 & 0 & 0 & 1 \\
+        \hline
+    \end{tabular}
+    \caption{Tabla de verdad con NAND:OR}\label{table:NAND-OR}
+\end{table}
+
+\subsection{Para XOR}
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|}
+        \hline
+        a & b & \rule{0pt}{2.5ex}$a \overline{\wedge} b$ & $a \overline{\wedge} (a \overline{\wedge} b)$ & $b \overline{\wedge} (a \overline{\wedge} b)$ & $(a \overline{\wedge} (a \overline{\wedge} b)) \overline{\wedge} (b \overline{\wedge} (a \overline{\wedge} b))$ \\
+        \hline
+        0 & 0 & 1 & 1 & 1 & 0\\
+        \hline
+        0 & 1 & 1 & 1 & 0 & 1\\
+        \hline
+        1 & 0 & 1 & 0 & 1 & 1\\
+        \hline
+        1 & 1 & 0 & 1 & 1 & 0\\
+        \hline
+    \end{tabular}
+    \caption{Tabla de verdad con NAND:XOR}\label{table:NAND-XOR}
+\end{table}
+
+\subsection{Para AND}
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        a & b & \rule{0pt}{2.5ex}$a \overline{\wedge} b$ & $(a \overline{\wedge} b) \overline{\wedge} (a \overline{\wedge} b)$ \\
+        \hline
+        0 & 0 & 1 & 0 \\
+        \hline
+        0 & 1 & 1 & 0 \\
+        \hline
+        1 & 0 & 1 & 0 \\
+        \hline
+        1 & 1 & 0 & 1 \\
+        \hline
+    \end{tabular}
+    \caption{Tabla de verdad con NAND:AND}\label{table:NAND-AND}
+\end{table}

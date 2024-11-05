@@ -1,0 +1,112 @@
+% !TeX root = main.tex
+\section{Supon una maquina expendedora de botanas que acepta monedas de 1, 2 y 5
+pesos. Esta configurada de tal forma que maximo permite una moneda de cada
+valor, por lo que el monto ingresado solo puede ir de 0 a 8 pesos. Asignando las
+variables booleanas:}
+\begin{itemize}
+    \item \large a $\rightarrow$ ingreso moneda de \$1.
+    \item \large b $\rightarrow$ ingreso moneda de \$2.
+    \item \large c $\rightarrow$ ingreso moneda de \$5.
+\end{itemize}
+
+\subsection{Haz la tabla de de verdad e indica a que monto monetario corresponde}
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        Monto & c & b & a \\
+        \hline
+        0 & 0 & 0 & 0 \\
+        \hline
+        1 & 0 & 0 & 1 \\
+        \hline
+        2 & 0 & 1 & 0 \\
+        \hline
+        3 & 0 & 1 & 1 \\
+        \hline
+        4 & 1 & 0 & 0 \\
+        \hline
+        5 & 1 & 0 & 1 \\
+        \hline
+        6 & 1 & 1 & 0 \\
+        \hline
+        7 & 1 & 1 & 1 \\
+        \hline
+    \end{tabular}
+    \caption{Tabla de configuraciones de montos}\label{table:montos}
+\end{table}
+
+\subsection{Indica las combinaciones posibles para ingresar más de 5 pesos}
+Para $\text{Monto} > \mathdollar 5 \rightarrow \{110, 111\}$
+
+\subsection{Si se pide ingresar por lo menos 5 pesos, ¿cuál es la probabilidad de cada una de las variables de ser 1?}
+Sabemos que para $\text{Monto} \geq \mathdollar 5 \rightarrow \{101, 110, 111\}$
+\begin{gather*}
+    P(c = 1) = \frac{3}{3} = 1 = \%100\\
+    P(b = 1) = \frac{2}{3} = 0.\overline{6} = \%66.\overline{6}\\
+    P(a = 1) = \frac{2}{3} = 0.\overline{6} = \%66.\overline{6}\\
+\end{gather*} 
+
+\subsection{Utilizando tablas de verdad indica si es cierta o falsa la siguiente afirmación: si quiero ingresar 5 pesos o mas, entonces debo de insertar una moneda de 5 pesos}
+Si asignamos a $d$ como la sentencia: El monto es mayor o igual que 5 ($Monto \geq 5$), desarrollamos su tabla de verdad:
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        c & d & d$\rightarrow$c \\
+        \hline
+        0 & 0 & 1 \\
+        \hline
+        0 & 1 & 0 \\
+        \hline
+        1 & 0 & 1 \\
+        \hline
+        1 & 1 & 1 \\
+        \hline
+    \end{tabular}
+    \caption{Tabla de verdad de implicación `d' entonces `c'}\label{table:d-then-c}
+\end{table}
+
+Por las tablas de verdad del primer inciso y el conjunto de soluciones del tercer inciso sabemos que, cuando $d = 1$, $c = 1$.
+Por lo tanto, \textbf{la sentencia es verdadera.}
+
+\subsection{Utilizando tablas de verdad indica si es cierta o falsa la siguiente afirmación: si quiero ingresar 5 pesos o mas, entonces debo de insertar una moneda de 1 peso}
+Si asignamos a $d$ como la sentencia: El monto es mayor o igual que 5 ($Monto \geq 5$), desarrollamos su tabla de verdad:
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        a & d & d$\rightarrow$a \\
+        \hline
+        0 & 0 & 1 \\
+        \hline
+        0 & 1 & 0 \\
+        \hline
+        1 & 0 & 1 \\
+        \hline
+        1 & 1 & 1 \\
+        \hline
+    \end{tabular}
+    \caption{Tabla de verdad de implicación `d' entonces `a'}\label{table:d-then-a}
+\end{table}
+
+Por las tablas de verdad del primer inciso y el conjunto de soluciones del tercer inciso sabemos que, cuando $d = 1$, se sigue la siguiente tabla de verdad.
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        a & d & d$\rightarrow$a \\
+        \hline
+        1 & 0 & 1 \\
+        \hline
+        0 & 1 & 0 \\
+        \hline
+        1 & 0 & 1 \\
+        \hline
+    \end{tabular}
+    \caption{Tabla de verdad de implicación `d' entonces `c' para Monto = \$5}\label{table:d-then-c-5}
+\end{table}
+
+En este caso, la \textbf{sentencia es inconsistente}.

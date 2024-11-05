@@ -1,0 +1,34 @@
+% !TeX root = main.tex
+\section{Genera la tabla de verdad que muestre la salida para un sistema que reciba 3 bit: dos son entradas para una operación logica y un tercer bit es de de control, el cual determina si realiza un and o un or con las otras dos}
+Asignamos
+\begin{itemize}
+    \item[a] entrada 1
+    \item[b] entrada 2
+    \item[c] entrada de operación `AND' (0) y `OR' (1)
+    \item[d] salida tras operación
+\end{itemize}
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c||c|}
+        \hline
+        \textbf{a} & \textbf{b} & \textbf{c} & \textbf{d} \\
+        \hline
+        0 & 0 & 0 & 0 \\
+        \hline
+        0 & 0 & 1 & 0 \\
+        \hline
+        0 & 1 & 0 & 0 \\
+        \hline
+        0 & 1 & 1 & 1 \\
+        \hline
+        1 & 0 & 0 & 0 \\
+        \hline
+        1 & 0 & 1 & 1 \\
+        \hline
+        1 & 1 & 0 & 1 \\
+        \hline
+        1 & 1 & 1 & 1 \\
+        \hline
+    \end{tabular}
+    \caption{Tabla de verdad para AND y OR controlado}\label{table:and-or-config}
+\end{table}

@@ -1,0 +1,136 @@
+% !TeX root = main.tex
+\section{Un subsistema de navegacion de un robot contiene un conjunto de 9 sensores infrarojos (cada uno regresa un 1 si detecta la presencia de algo justo enfrente) colocados a modo de matriz de 3 x 3. se requiere que dicho subsistema regrese la deteccion de obstaculos en alguna direccion de acuerdo a lo siguiente:}
+\subsection{Arriba obstaculo total: cuando los 3 sensores de la parte superior detectan algo.}
+Definimos la matriz y las celdas como se presenta a continuación:
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        a & b & c \\
+        \hline
+        d & e & f \\
+        \hline
+        g & h & i \\
+        \hline
+    \end{tabular}
+    \caption{Matriz de sensores}\label{table:matriz-sensores}
+\end{table}
+Con esto, para registrar que hay un obstáculo total en la parte superior, se considera que las entradas de interés son la $a$, $b$, y $c$. El resto de entradas no influyen en la detección de obstáculos total en la parte de arriba. La tabla de verdad es:
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        a & b & c & $\text{Arriba}_{\text{TOTAL}}$\\
+        \hline
+        0 & 0 & 0 & 0 \\
+        \hline
+        0 & 0 & 1 & 0 \\
+        \hline
+        0 & 1 & 0 & 0 \\
+        \hline
+        0 & 1 & 1 & 0 \\
+        \hline
+        1 & 0 & 0 & 0 \\
+        \hline
+        1 & 0 & 1 & 0 \\
+        \hline
+        1 & 1 & 0 & 0 \\
+        \hline
+        1 & 1 & 1 & 1 \\
+        \hline
+    \end{tabular}
+    \caption{Tabla de verdad para los obstáculos totales en la parte de arriba}\label{table:arriba-total}
+\end{table}
+
+La expresión de salida es:
+\begin{equation*}
+    a \wedge b \wedge c
+\end{equation*}
+\subsection{Arriba obstaculo parcial: cuando alguno de los 3 sensores de la parte superior detecta algo}
+Por otro lado, para los parciales, solo es necesario que alguno de los 3 se active, por lo que su tabla de verdad es:
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        a & b & c & $\text{Arriba}_{\text{parcial}}$\\
+        \hline
+        0 & 0 & 0 & 0 \\
+        \hline
+        0 & 0 & 1 & 1 \\
+        \hline
+        0 & 1 & 0 & 1 \\
+        \hline
+        0 & 1 & 1 & 1 \\
+        \hline
+        1 & 0 & 0 & 1 \\
+        \hline
+        1 & 0 & 1 & 1 \\
+        \hline
+        1 & 1 & 0 & 1 \\
+        \hline
+        1 & 1 & 1 & 1 \\
+        \hline
+    \end{tabular}
+    \caption{Tabla de verdad para los obstáculos parciales en la parte de arriba}\label{table:arriba-parcial}
+\end{table}
+
+\vspace{1cm}
+La expresión de salida es:
+\begin{equation*}
+    a \vee b \vee c
+\end{equation*}
+
+\vspace{2cm}
+\subsection{De forma similar con los sensores correspondientes para las direcciones de abajo, izquierda y derecha.}
+Dado que se tratan de forma similar, a continuación se presentarán las expresiones lógicas con las entradas correspondientes para cada señal de obstáculos:
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        $\text{Entrada}_1$ & $\text{Entrada}_2$ & $\text{Entrada}_3$ & Expresión & Obstáculo \\
+        \hline
+        a & b & c & $a \wedge b \wedge c$ & $\text{Arriba}_{\text{TOTAL}}$ \\
+        \hline
+        a & b & c & $a \vee b \vee c$ & $\text{Arriba}_{\text{parcial}}$ \\
+        \hline
+        g & h & i & $g \wedge h \wedge i$ & $\text{Abajo}_{\text{TOTAL}}$ \\
+        \hline
+        g & h & i & $g \vee h \vee i$ & $\text{Abajo}_{\text{parcial}}$ \\
+        \hline
+        a & d & g & $a \wedge d \wedge g$ & $\text{Izquierda}_{\text{TOTAL}}$ \\
+        \hline
+        a & d & g & $a \vee d \vee g$ & $\text{Izquierda}_{\text{parcial}}$ \\
+        \hline
+        c & f & i & $c \wedge f \wedge i$ & $\text{Derecha}_{\text{TOTAL}}$ \\
+        \hline
+        c & f & i & $c \vee f \vee i$ & $\text{Derecha}_{\text{parcial}}$ \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\textbf{\Large Un caso particular es determinar la direccion frontal, esto se determina de la siguiente forma:}
+\subsection{Frontal obstáculo parcial: cuando existe algun obstáculo parcial en alguna direccion y ademas el sensor de enmedio detecta algo}
+
+Para esto, traducimos la sentencia a lógica proposicional:
+
+\begin{equation*}
+    \text{Frontal}_{\text{parcial}} = e \wedge (\text{Arriba}_{\text{parcial}} \vee \text{Abajo}_{\text{parcial}} \vee \text{Izquierda}_{\text{parcial}} \vee \text{Derecha}_{\text{parcial}})
+\end{equation*}
+
+Si desarrollamos y simplificamos las variables que se repiten, es equivalente a:
+\begin{equation*}
+    e \wedge (a \vee b \vee c \vee d \vee f \vee g \vee h \vee i)
+\end{equation*}
+
+\subsection{Frontal obstaculo total: cuando existe un obstaculo total en todas las direcciones y ademas el sensor de enmedio detecta algo}
+Para esto, traducimos la sentencia a lógica proposicional:
+\begin{equation*}
+    \text{Frontal}_{\text{TOTAL}} = e \wedge (\text{Arriba}_{\text{TOTAL}} \wedge \text{Abajo}_{\text{TOTAL}} \wedge \text{Izquierda}_{\text{TOTAL}} \wedge \text{Derecha}_{\text{TOTAL}})
+\end{equation*}
+
+Si desarrollamos y simplificamos las variables que se repiten, es equivalente a:
+\begin{gather*}
+    e \wedge (a \wedge b \wedge c \wedge d \wedge f \wedge g \wedge h \wedge i) \\
+    e \wedge a \wedge b \wedge c \wedge d \wedge f \wedge g \wedge h \wedge i
+\end{gather*}

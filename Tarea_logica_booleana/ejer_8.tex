@@ -1,0 +1,136 @@
+% !TeX root = main.tex
+\section{Una máquina de producción tiene sensores que indican la existencia de:}
+\begin{itemize}
+    \item \large Tornillos
+    \item \large Tuercas
+    \item \large Rondana
+    \item \large Remaches
+\end{itemize}
+\subsection{Modo A:operación normal. Cuando existen tornillos, tuercas y rondanas, sin importar si hay remaches.}
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        a & b & c & d & Modo A \\
+        \hline
+        0 & 0 & 0 & 0 & 0 \\
+        \hline
+        0 & 0 & 0 & 1 & 0 \\
+        \hline
+        0 & 0 & 1 & 0 & 0 \\
+        \hline
+        0 & 0 & 1 & 1 & 0 \\
+        \hline
+        0 & 1 & 0 & 0 & 0 \\
+        \hline
+        0 & 1 & 0 & 1 & 0 \\
+        \hline
+        0 & 1 & 1 & 0 & 0 \\
+        \hline
+        0 & 1 & 1 & 1 & 0 \\
+        \hline
+        1 & 0 & 0 & 0 & 0 \\
+        \hline
+        1 & 0 & 0 & 1 & 0 \\
+        \hline
+        1 & 0 & 1 & 0 & 0 \\
+        \hline
+        1 & 0 & 1 & 1 & 0 \\
+        \hline
+        1 & 1 & 0 & 0 & 0 \\
+        \hline
+        1 & 1 & 0 & 1 & 0 \\
+        \hline
+        1 & 1 & 1 & 0 & 1 \\
+        \hline
+        1 & 1 & 1 & 1 & 1 \\
+        \hline        
+    \end{tabular}
+    \caption{Tabla de verdad para modo A}\label{table:modo-A}
+\end{table}
+\newpage
+\subsection{Modo B. Operación con remaches. Cuando faltan ya sea tornillos, tuercas o rondanas y hay remaches}
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        a & b & c & d & Modo B \\
+        \hline
+        0 & 0 & 0 & 0 & 0 \\
+        \hline
+        0 & 0 & 0 & 1 & 1 \\
+        \hline
+        0 & 0 & 1 & 0 & 0 \\
+        \hline
+        0 & 0 & 1 & 1 & 1 \\
+        \hline
+        0 & 1 & 0 & 0 & 0 \\
+        \hline
+        0 & 1 & 0 & 1 & 1 \\
+        \hline
+        0 & 1 & 1 & 0 & 0 \\
+        \hline
+        0 & 1 & 1 & 1 & 1 \\
+        \hline
+        1 & 0 & 0 & 0 & 0 \\
+        \hline
+        1 & 0 & 0 & 1 & 1 \\
+        \hline
+        1 & 0 & 1 & 0 & 0 \\
+        \hline
+        1 & 0 & 1 & 1 & 1 \\
+        \hline
+        1 & 1 & 0 & 0 & 0 \\
+        \hline
+        1 & 1 & 0 & 1 & 1 \\
+        \hline
+        1 & 1 & 1 & 0 & 0 \\
+        \hline
+        1 & 1 & 1 & 1 & 0 \\
+        \hline        
+    \end{tabular}
+    \caption{Tabla de verdad para modo B}\label{table:modo-B}
+\end{table}
+\newpage
+\subsection{Modo C:alto total, cuando no existe ninguno de los 4}
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        a & b & c & d & Modo C \\
+        \hline
+        0 & 0 & 0 & 0 & 1 \\
+        \hline
+        0 & 0 & 0 & 1 & 0 \\
+        \hline
+        0 & 0 & 1 & 0 & 0 \\
+        \hline
+        0 & 0 & 1 & 1 & 0 \\
+        \hline
+        0 & 1 & 0 & 0 & 0 \\
+        \hline
+        0 & 1 & 0 & 1 & 0 \\
+        \hline
+        0 & 1 & 1 & 0 & 0 \\
+        \hline
+        0 & 1 & 1 & 1 & 0 \\
+        \hline
+        1 & 0 & 0 & 0 & 0 \\
+        \hline
+        1 & 0 & 0 & 1 & 0 \\
+        \hline
+        1 & 0 & 1 & 0 & 0 \\
+        \hline
+        1 & 0 & 1 & 1 & 0 \\
+        \hline
+        1 & 1 & 0 & 0 & 0 \\
+        \hline
+        1 & 1 & 0 & 1 & 0 \\
+        \hline
+        1 & 1 & 1 & 0 & 0 \\
+        \hline
+        1 & 1 & 1 & 1 & 0 \\
+        \hline        
+    \end{tabular}
+    \caption{Tabla de verdad para modo C}\label{table:modo-C}
+\end{table}
